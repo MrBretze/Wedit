@@ -88,7 +88,7 @@ public class GuiChat extends GuiScreen implements ITabCompleter
     {
         this.tabCompleter.resetRequested();
 
-        if (keyCode == 15)
+        if (keyCode == Keyboard.KEY_TAB)
         {
             this.tabCompleter.complete();
         }
@@ -97,25 +97,25 @@ public class GuiChat extends GuiScreen implements ITabCompleter
             this.tabCompleter.resetDidComplete();
         }
 
-        if (keyCode == 1)
+        if (keyCode == Keyboard.KEY_ESCAPE)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
         }
-        else if (keyCode != 28 && keyCode != 156)
+        else if (keyCode != Keyboard.KEY_RETURN && keyCode != Keyboard.KEY_NUMPADENTER)
         {
-            if (keyCode == 200)
+            if (keyCode == Keyboard.KEY_UP)
             {
                 this.getSentHistory(-1);
             }
-            else if (keyCode == 208)
+            else if (keyCode == Keyboard.KEY_DOWN)
             {
                 this.getSentHistory(1);
             }
-            else if (keyCode == 201)
+            else if (keyCode == Keyboard.KEY_PRIOR)
             {
                 this.mc.ingameGUI.getChatGUI().scroll(this.mc.ingameGUI.getChatGUI().getLineCount() - 1);
             }
-            else if (keyCode == 209)
+            else if (keyCode == Keyboard.KEY_NEXT)
             {
                 this.mc.ingameGUI.getChatGUI().scroll(-this.mc.ingameGUI.getChatGUI().getLineCount() + 1);
             }

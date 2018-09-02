@@ -55,6 +55,7 @@ public class Undo
         endPriorityList.add(Material.LEAVES2);
         endPriorityList.add(Material.VINE);
         endPriorityList.add(Material.COCOA);
+        endPriorityList.add(Material.ANVIL);
     }
 
     public Undo(BlockPos pos1, BlockPos pos2, EntityPlayerSP sender)
@@ -237,7 +238,7 @@ public class Undo
                     }
 
                     //send a message and remove the thread to the list
-                    Wedit.sendMessage(TextFormatting.AQUA + "Undo !");
+                    Wedit.sendMessage(TextFormatting.AQUA + "Undo ! " + TextFormatting.BLUE + undo.getUndoBlocks().size() + TextFormatting.AQUA + " Blocks !");
                     Undo.undoThread.remove(Thread.currentThread());
                 }
             });

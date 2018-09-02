@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import fr.bretzel.wedit.Wedit;
+import fr.bretzel.wedit.command.api.IWeditCommand;
 import fr.bretzel.wedit.undo.Undo;
 import fr.bretzel.wedit.undo.UndoBlock;
 import fr.bretzel.wedit.util.Material;
@@ -42,6 +43,11 @@ public class CommandSet extends IWeditCommand
     	startPriorityList.add(Material.GRAVEL);
     	startPriorityList.add(Material.SAND);
     	startPriorityList.add(Material.CONCRETE_POWDER);
+    	startPriorityList.add(Material.LEAVES);
+    	startPriorityList.add(Material.LEAVES2);
+    	startPriorityList.add(Material.COCOA);
+    	startPriorityList.add(Material.VINE);
+    	startPriorityList.add(Material.ANVIL);
     }
 
     public CommandSet(boolean hollow)
@@ -236,10 +242,8 @@ public class CommandSet extends IWeditCommand
 		return startPriorityList.contains(material);
 	}
 
-    @Override
-    public String[] executeTab(EntityPlayerSP sender, String label, String args)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public String getUsage() {
+		return "Usage: #set <block> <skeep>";
+	}
 }

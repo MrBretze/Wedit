@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.bretzel.wedit.Wedit;
+import fr.bretzel.wedit.command.api.IWeditCommand;
 import fr.bretzel.wedit.undo.Undo;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
@@ -39,11 +40,10 @@ public class CommandUndo extends IWeditCommand
 
         return false;
     }
-
+    
+    
     @Override
-    public String[] executeTab(EntityPlayerSP sender, String label, String args)
-    {
-        // TODO Auto-generated method stub
-        return null;
+    public String getUsage() {
+    	return "Usage: #undo <skeep>";
     }
 }

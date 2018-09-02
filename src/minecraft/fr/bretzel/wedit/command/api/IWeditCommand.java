@@ -1,4 +1,4 @@
-package fr.bretzel.wedit.command;
+package fr.bretzel.wedit.command.api;
 
 import java.util.List;
 
@@ -8,5 +8,5 @@ public abstract class IWeditCommand
 {
     public abstract boolean execute(EntityPlayerSP sender, String label, String[] args);
 
-    public abstract String[] executeTab(EntityPlayerSP sender, String label, String args);
+    public abstract String getUsage();
 }

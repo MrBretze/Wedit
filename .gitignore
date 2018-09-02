@@ -7,7 +7,6 @@ logs/
 mappingviewer/
 modsrc/
 runtime/
-src/minecraft/net
 src/minecraft/Start.java
 src/minecraft/mcp/
 temp/
@@ -15,3 +14,4 @@ temp/
 *.bat
 *.cfg
 *.json
+reobf/
