@@ -1,1 +1,1 @@
-Wedit-MCP
+Wedit

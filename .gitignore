@@ -1,0 +1,17 @@
+bin/
+conf/
+docs/
+eclipse/
+jars/
+logs/
+mappingviewer/
+modsrc/
+runtime/
+src/minecraft/net
+src/minecraft/Start.java
+src/minecraft/mcp/
+temp/
+*.sh
+*.bat
+*.cfg
+*.json
