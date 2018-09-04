@@ -19,7 +19,7 @@ public class UndoBlock
 
     public UndoBlock(BlockPos pos)
     {
-        World world =  Minecraft.getMinecraft().world;
+        World world =  Minecraft.getMinecraft().player.getEntityWorld();
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         this.data = block.getMetaFromState(state);

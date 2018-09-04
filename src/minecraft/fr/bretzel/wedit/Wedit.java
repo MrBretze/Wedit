@@ -1,11 +1,13 @@
 package fr.bretzel.wedit;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Map;
 
 import fr.bretzel.wedit.render.BlockRender;
 import fr.bretzel.wedit.undo.UndoBlock;
 import fr.bretzel.wedit.util.Material;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -34,8 +36,38 @@ public class Wedit
         setBlock(pos, block, 0);
     }
 
+    private static ArrayList<Material> priorityForSetBlock = new ArrayList<>();
+    
+    static 
+    {
+    	priorityForSetBlock.add(Material.DEADBUSH);
+    	priorityForSetBlock.add(Material.REEDS);
+    	priorityForSetBlock.add(Material.CACTUS);
+    	priorityForSetBlock.add(Material.FARMLAND);
+    	priorityForSetBlock.add(Material.WATER);
+    	priorityForSetBlock.add(Material.FLOWING_WATER);
+    	priorityForSetBlock.add(Material.LAVA);
+    	priorityForSetBlock.add(Material.FLOWING_LAVA);
+    	priorityForSetBlock.add(Material.CARROTS);
+    	priorityForSetBlock.add(Material.BEETROOTS);
+    	priorityForSetBlock.add(Material.POTATOES);
+    	priorityForSetBlock.add(Material.WHEAT);
+    	priorityForSetBlock.add(Material.TALLGRASS);
+    	priorityForSetBlock.add(Material.DOUBLE_PLANT);
+    	priorityForSetBlock.add(Material.YELLOW_FLOWER);
+    	priorityForSetBlock.add(Material.RED_FLOWER);
+    	priorityForSetBlock.add(Material.GRAVEL);
+    	priorityForSetBlock.add(Material.SAND);
+    	priorityForSetBlock.add(Material.CONCRETE_POWDER);
+    	priorityForSetBlock.add(Material.LEAVES);
+    	priorityForSetBlock.add(Material.LEAVES2);
+    	priorityForSetBlock.add(Material.COCOA);
+    	priorityForSetBlock.add(Material.VINE);
+    	priorityForSetBlock.add(Material.ANVIL);
+    }
+    
     //Complex method for a setblock
-    public static void setBlock(BlockPos pos, Material material, String json, int data)
+    public static void setBlock(BlockPos pos, Material material, int data, String json)
     {
         if (isReplaceBlock(pos, material.getBlockName(), data))
         {
@@ -54,13 +86,13 @@ public class Wedit
     //Basic method for a setblock
     public static void setBlock(BlockPos pos, String block, int data)
     {
-        setBlock(pos, Material.getMaterialOfBlock(block), "", data);
+        setBlock(pos, Material.getMaterialOfBlock(block), data, "");
     }
 
     //Basic method for a setblock used UndoBlock class
     public static void setBlock(UndoBlock block)
     {
-        setBlock(block.getPosition(), block.getMaterial(), block.getJsonSaveNbt(), block.getData());
+        setBlock(block.getPosition(), block.getMaterial(), block.getData(), block.getJsonSaveNbt());
     }
 
     //if the block is already placed
@@ -138,4 +170,9 @@ public class Wedit
 
         return false;
     }
+    
+    public static boolean isPriorityPos(Material material) 
+    {
+		return priorityForSetBlock.contains(material);
+	}
 }

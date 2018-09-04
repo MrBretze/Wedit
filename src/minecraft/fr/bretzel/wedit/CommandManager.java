@@ -8,6 +8,8 @@ import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.realmsclient.gui.ChatFormatting;
 
+import fr.bretzel.wedit.command.CommandCircle;
+import fr.bretzel.wedit.command.CommandPos;
 import fr.bretzel.wedit.command.CommandSet;
 import fr.bretzel.wedit.command.CommandSphere;
 import fr.bretzel.wedit.command.CommandUndo;
@@ -40,6 +42,10 @@ public class CommandManager
 		registerCommand(new CommandSphere(false), "sphere");
 		registerCommand(new CommandSphere(true), "hsphere");
 		registerCommand(new CommandUndo(), "undo");
+		registerCommand(new CommandPos(true), "pos1");
+		registerCommand(new CommandPos(false), "pos2");
+		registerCommand(new CommandCircle(false), "circle");
+		registerCommand(new CommandCircle(true), "hcircle");
 	}
 
 	/**
@@ -54,7 +60,9 @@ public class CommandManager
 		String[] args = command.substring(1).trim().split("\\p{Z}");
 		//label = The name of command.
 		String label = args[0];
-
+		
+		boolean cmdFeedBack = player.getEntityWorld().getGameRules().getBoolean("sendCommandFeedback");
+		
 		if(commands.containsKey(args[0])) {
 			//for all command get the name of command and compare by the text entered by the player, if truc execute command.
 			for (String s : commands.keySet())
@@ -63,8 +71,9 @@ public class CommandManager
 				{
 					Thread t = new Thread(() ->
 					{
-						//set command feed back to false
-						Wedit.setCommandFeedBack(false);
+						//set command feed back to false if cmdFeedBack is true
+						if(cmdFeedBack)
+							Wedit.setCommandFeedBack(false);
 						//get the command
 						IWeditCommand cmd = commands.get(s);
 
@@ -80,6 +89,9 @@ public class CommandManager
 							Wedit.sendMessage(TextFormatting.DARK_RED + "Log: ");
 							Wedit.sendMessage(TextFormatting.DARK_RED + "" + e.fillInStackTrace());
 							e.printStackTrace();
+							try {
+								Thread.sleep(100L);
+							} catch (InterruptedException e1) {}
 							Thread.currentThread().interrupt();
 						}
 
@@ -89,7 +101,7 @@ public class CommandManager
 						
 						//if a another command is running to prevent a massive spam message of setblock
 						if (commandThread.isEmpty() && Undo.undoThread.isEmpty())
-							Wedit.setCommandFeedBack(true);
+							Wedit.setCommandFeedBack(cmdFeedBack);
 					});
 					//start the thread of command
 					t.start();
@@ -106,6 +118,7 @@ public class CommandManager
 		for (String cmd : commands.keySet())
 		{
 			Wedit.sendMessage(ChatFormatting.AQUA + "      " + cmd);
+			Wedit.sendMessage(ChatFormatting.AQUA + "           " + commands.get(cmd).getUsage());
 		}
 
 		return false;

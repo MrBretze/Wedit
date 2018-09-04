@@ -21,34 +21,6 @@ import net.minecraft.util.text.TextFormatting;
 public class CommandSet extends IWeditCommand
 {
     private boolean hollow = false;
-    private static ArrayList<Material> startPriorityList = new ArrayList<>();
-    
-    {
-    	startPriorityList.add(Material.DEADBUSH);
-    	startPriorityList.add(Material.REEDS);
-    	startPriorityList.add(Material.CACTUS);
-    	startPriorityList.add(Material.FARMLAND);
-    	startPriorityList.add(Material.WATER);
-    	startPriorityList.add(Material.FLOWING_WATER);
-    	startPriorityList.add(Material.LAVA);
-    	startPriorityList.add(Material.FLOWING_LAVA);
-    	startPriorityList.add(Material.CARROTS);
-    	startPriorityList.add(Material.BEETROOTS);
-    	startPriorityList.add(Material.POTATOES);
-    	startPriorityList.add(Material.WHEAT);
-    	startPriorityList.add(Material.TALLGRASS);
-    	startPriorityList.add(Material.DOUBLE_PLANT);
-    	startPriorityList.add(Material.YELLOW_FLOWER);
-    	startPriorityList.add(Material.RED_FLOWER);
-    	startPriorityList.add(Material.GRAVEL);
-    	startPriorityList.add(Material.SAND);
-    	startPriorityList.add(Material.CONCRETE_POWDER);
-    	startPriorityList.add(Material.LEAVES);
-    	startPriorityList.add(Material.LEAVES2);
-    	startPriorityList.add(Material.COCOA);
-    	startPriorityList.add(Material.VINE);
-    	startPriorityList.add(Material.ANVIL);
-    }
 
     public CommandSet(boolean hollow)
     {
@@ -75,7 +47,6 @@ public class CommandSet extends IWeditCommand
             return false;
         }
 
-        Wedit.setCommandFeedBack(false);
         String[] blocks = args[0].split(":");
         Block blk = null;
 
@@ -110,7 +81,6 @@ public class CommandSet extends IWeditCommand
 
         ArrayList<BlockPos> priorityPos = new ArrayList<>();
         ArrayList<BlockPos> normalPos = new ArrayList<>();
-        int blockposed = 0;
         String block = args[0];
         int data = 0;
         BlockPos pos1 = Wedit.getFirstPosition();
@@ -152,7 +122,7 @@ public class CommandSet extends IWeditCommand
                     	if (x == maxx || x == minx || z == maxz || z == minz ||
                             y == maxy || y == miny)
                     	{
-                    		if (isPriorityPos(Material.getMaterialOfBlock(state.getBlock())))
+                    		if (Wedit.isPriorityPos(Material.getMaterialOfBlock(state.getBlock())))
                             	priorityPos.add(p);
                             else
                             	normalPos.add(p);
@@ -162,7 +132,7 @@ public class CommandSet extends IWeditCommand
                     	else
                     		continue;
                     } else {
-                    	if (isPriorityPos(Material.getMaterialOfBlock(state.getBlock())))
+                    	if (Wedit.isPriorityPos(Material.getMaterialOfBlock(state.getBlock())))
                     		priorityPos.add(p);
                     	else
                     		normalPos.add(p);
@@ -196,7 +166,6 @@ public class CommandSet extends IWeditCommand
         for (BlockPos pos : priorityPos)
         {
         	Wedit.setBlock(pos, block, data);
-        	blockposed++;
         	
             if (speed > 0)
             {
@@ -211,7 +180,6 @@ public class CommandSet extends IWeditCommand
         for (BlockPos pos : normalPos)
         {
         	Wedit.setBlock(pos, block, data);
-        	blockposed++;
         	
             if (speed > 0)
             {
@@ -223,7 +191,7 @@ public class CommandSet extends IWeditCommand
             }
         }
 
-        Wedit.sendMessage(TextFormatting.AQUA + "Your are set " + TextFormatting.BLUE + blockposed + TextFormatting.AQUA + " block of " + TextFormatting.BLUE + block.toUpperCase());
+        Wedit.sendMessage(TextFormatting.AQUA + "Your are set " + TextFormatting.BLUE + (priorityPos.size() + normalPos.size()) + TextFormatting.AQUA + " block of " + TextFormatting.BLUE + block.toUpperCase());
         return true;
     }
 
@@ -236,11 +204,6 @@ public class CommandSet extends IWeditCommand
     {
         return pos < pos1 ? pos : pos1;
     }
-    
-    public boolean isPriorityPos(Material material) 
-    {
-		return startPriorityList.contains(material);
-	}
 
 	@Override
 	public String getUsage() {

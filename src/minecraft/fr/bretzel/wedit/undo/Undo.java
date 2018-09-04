@@ -137,6 +137,9 @@ public class Undo
     //To add a undo
     public static void addUndo(Undo undo)
     {
+    	if(undo == null || getAllUndo().contains(undo))
+    		return;
+    	
         getAllUndo().add(undo);
     }
 
