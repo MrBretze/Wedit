@@ -14,7 +14,6 @@ public class UndoBlock
 {
     private NBTTagCompound tag;
     private BlockPos position;
-    private int data;
     private Material material;
 
     public UndoBlock(BlockPos pos)
@@ -22,7 +21,6 @@ public class UndoBlock
         World world =  Minecraft.getMinecraft().player.getEntityWorld();
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        this.data = block.getMetaFromState(state);
         this.position = pos;
         this.material = Material.getMaterialOfBlock(block);
         /*if (material.isNbtSavable())
@@ -53,11 +51,6 @@ public class UndoBlock
     public Material getMaterial()
     {
         return material;
-    }
-
-    public int getData()
-    {
-        return data;
     }
 
     public String getJsonSaveNbt()

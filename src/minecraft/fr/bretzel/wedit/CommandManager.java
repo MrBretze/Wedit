@@ -18,10 +18,13 @@ import fr.bretzel.wedit.undo.Undo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerInteractionManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.WorldServer;
 
@@ -63,7 +66,14 @@ public class CommandManager
 		
 		boolean cmdFeedBack = player.getEntityWorld().getGameRules().getBoolean("sendCommandFeedback");
 		
-		if(commands.containsKey(args[0])) {
+		
+		for(ResourceLocation b : IRegistry.BLOCK.getKeys())
+		{
+			String block = b.getPath();
+			System.out.println(b.getPath().toUpperCase() + "(\"" + block + "\", new ResourceLocation(\"" + b.getNamespace() + "\", \"" + b.getPath() + "\")),");
+		}
+		
+		/*if(commands.containsKey(args[0])) {
 			//for all command get the name of command and compare by the text entered by the player, if truc execute command.
 			for (String s : commands.keySet())
 			{
@@ -122,8 +132,8 @@ public class CommandManager
 		{
 			Wedit.sendMessage(ChatFormatting.AQUA + "      " + cmd);
 			Wedit.sendMessage(ChatFormatting.AQUA + "           " + commands.get(cmd).getUsage());
-		}
-
+		}*/
+		
 		return false;
 	}
 

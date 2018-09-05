@@ -32,8 +32,8 @@ public class Undo
 
     static
     {
-        endPriorityList.add(Material.DEADBUSH);
-        endPriorityList.add(Material.REEDS);
+        endPriorityList.add(Material.DEAD_BUSH);
+        endPriorityList.add(Material.SUGAR_CANE);
         endPriorityList.add(Material.CACTUS);
         endPriorityList.add(Material.FARMLAND);
         endPriorityList.add(Material.WATER);
@@ -42,7 +42,7 @@ public class Undo
         endPriorityList.add(Material.BEETROOTS);
         endPriorityList.add(Material.POTATOES);
         endPriorityList.add(Material.WHEAT);
-        endPriorityList.add(Material.TALLGRASS);
+        endPriorityList.add(Material.TALL_GRASS);
         endPriorityList.add(Material.DOUBLE_PLANT);
         endPriorityList.add(Material.YELLOW_FLOWER);
         endPriorityList.add(Material.RED_FLOWER);
@@ -177,7 +177,7 @@ public class Undo
                     //Run the main list
                     for (UndoBlock block : undo.getUndoBlocks())
                     {
-                        if (undo.getWorld().getBlockState(block.getPosition()).getBlock().getLocalizedName().equalsIgnoreCase("air") && block.getMaterial() == Material.AIR)
+                        if (undo.getWorld().getBlockState(block.getPosition()).getBlock().getTranslationKey().contains("air") && block.getMaterial() == Material.AIR)
                         {
                             continue;
                         }
@@ -185,7 +185,7 @@ public class Undo
                         //if is end block
                         if(isEndBlock(block.getMaterial()))
                         {
-                        	Wedit.setBlock(block.getPosition(), "air", 0);
+                        	Wedit.setBlock(block.getPosition(), "air");
                             endBlock.add(block);
                             continue;
                         }

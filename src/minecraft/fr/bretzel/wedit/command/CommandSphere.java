@@ -9,8 +9,6 @@ import fr.bretzel.wedit.undo.Undo;
 import fr.bretzel.wedit.util.Material;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.NumberInvalidException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;

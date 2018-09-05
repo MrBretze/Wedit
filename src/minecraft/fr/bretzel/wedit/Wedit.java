@@ -12,9 +12,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -29,12 +26,6 @@ public class Wedit
 
     //Return to the player
     private static EntityPlayerSP localPlayer = Minecraft.getMinecraft().player;
-
-    //Basic method for a setblock
-    public static void setBlock(BlockPos pos, String block)
-    {
-        setBlock(pos, block, 0);
-    }
 
     private static ArrayList<Material> priorityForSetBlock = new ArrayList<>();
     
@@ -67,16 +58,15 @@ public class Wedit
     }
     
     //Complex method for a setblock
-    public static void setBlock(BlockPos pos, Material material, int data, String json)
+    public static void setBlock(BlockPos pos, Material material, String json)
     {
-        if (isReplaceBlock(pos, material.getBlockName(), data))
+        if (isReplaceBlock(pos, material.getBlockName()))
         {
-            String command = "/setblock %x %y %z %block %data replace %json";
+            String command = "/setblock %x %y %z %block replace %json";
             command = command.replace("%x", String.valueOf(pos.getX()));
             command = command.replace("%y", String.valueOf(pos.getY()));
             command = command.replace("%z", String.valueOf(pos.getZ()));
             command = command.replace("%block", material.getBlockName());
-            command = command.replace("%data", String.valueOf(data));
             command = command.replace("%json", json);
             //Remplace all value and send command
             broadcastCommand(command);
@@ -84,26 +74,25 @@ public class Wedit
     }
 
     //Basic method for a setblock
-    public static void setBlock(BlockPos pos, String block, int data)
+    public static void setBlock(BlockPos pos, String block)
     {
-        setBlock(pos, Material.getMaterialOfBlock(block), data, "");
+        setBlock(pos, Material.getMaterialOfBlock(block), "");
     }
 
     //Basic method for a setblock used UndoBlock class
     public static void setBlock(UndoBlock block)
     {
-        setBlock(block.getPosition(), block.getMaterial(), block.getData(), block.getJsonSaveNbt());
+        setBlock(block.getPosition(), block.getMaterial(), block.getJsonSaveNbt());
     }
 
     //if the block is already placed
-    private static boolean isReplaceBlock(BlockPos pos, String blockName, int data)
+    private static boolean isReplaceBlock(BlockPos pos, String blockName)
     {
         IBlockState actual_blocksate = Minecraft.getMinecraft().world.getBlockState(pos);
         Block actual_block = actual_blocksate.getBlock();
         Material actu_mat = Material.getMaterialOfBlock(actual_block);
         Material new_mat = Material.getMaterialOfBlock(blockName);
-        int actual_data = actual_block.getMetaFromState(actual_blocksate);
-        return (actual_data != data) || (actu_mat != new_mat);
+        return actu_mat != new_mat;
     }
 
     //Basic utility to send a message
@@ -115,7 +104,7 @@ public class Wedit
     //Basic utility to send a message to a player
     public static void sendMessage(EntityPlayer player, String message)
     {
-        player.addChatMessage(new TextComponentString(message));
+        player.sendMessage(new TextComponentString(message));
     }
 
     //Set the gamerule command feed back to your value
