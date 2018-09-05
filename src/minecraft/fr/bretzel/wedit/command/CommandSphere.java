@@ -29,6 +29,15 @@ public class CommandSphere extends IWeditCommand
 	{
 		BlockPos center = sender.getPosition();
 
+		if (Wedit.getFirstPosition() == null)
+		{
+			Wedit.sendMessage(TextFormatting.RED + "Please set the first point !");
+			return false;
+		} else
+		{
+			center = Wedit.getFirstPosition();
+		}
+		
 		if (args.length <= 2)
 		{
 			Wedit.sendMessage(TextFormatting.RED + "Syntax: #sphere <block> <radius> <skeep>");

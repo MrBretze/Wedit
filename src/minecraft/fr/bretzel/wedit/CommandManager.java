@@ -80,6 +80,9 @@ public class CommandManager
 						try {
 							//execute the command
 							boolean sucess = cmd.execute(player, label, dropFirstString(args));
+							
+							if(!sucess)
+								Wedit.sendMessage(TextFormatting.RED + cmd.getUsage());
 						}
 						catch (Exception e)
 						{

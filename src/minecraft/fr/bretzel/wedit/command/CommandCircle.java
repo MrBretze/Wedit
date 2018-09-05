@@ -17,18 +17,6 @@ public class CommandCircle extends IWeditCommand {
 	
 	@Override
 	public boolean execute(EntityPlayerSP sender, String label, String[] args) {
-		
-		return false;
-	}
-
-	public boolean isHollow() {
-		return hollow;
-	}
-	
-	private ArrayList<BlockPos> generateCircle(BlockPos center, int radius, boolean hollow)
-	{
-		ArrayList<BlockPos> circleBlocks = new ArrayList<>();
-		
         int cx = center.getX();
         int cy = center.getY();
         int cz = center.getZ();
@@ -42,6 +30,17 @@ public class CommandCircle extends IWeditCommand {
                 }
             }
         }
+		return false;
+	}
+
+	public boolean isHollow() {
+		return hollow;
+	}
+	
+	private ArrayList<BlockPos> generateCircle(BlockPos center, int radius, boolean hollow)
+	{
+		ArrayList<BlockPos> circleBlocks = new ArrayList<>();
+		
 		return null;
 	}
 	
