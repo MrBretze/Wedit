@@ -8,8 +8,6 @@ import fr.bretzel.wedit.undo.Undo;
 import fr.bretzel.wedit.util.Material;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.NumberInvalidException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 
@@ -42,16 +40,7 @@ public class CommandCircle extends IWeditCommand {
 		}
 
 		String[] blocks = args[0].split(":");
-		Block blk = null;
-
-		try
-		{
-			blk = CommandBase.getBlockByText(sender, blocks[0]);
-		}
-		catch (NumberInvalidException e)
-		{
-			e.printStackTrace();
-		}
+		Block blk = Material.getNameOfBlock(blocks[0]);
 
 		if (blk == null)
 		{
@@ -90,13 +79,11 @@ public class CommandCircle extends IWeditCommand {
 		Undo undo = new Undo(center, null, sender);
 
 		String block = args[0];
-		int data = 0;
 
 		if (block.indexOf(':') >= 0)
 		{
 			String[] argument = block.split(":");
 			block = argument[0];
-			data = Integer.valueOf(argument[1]);
 		}
 		
 		ArrayList<BlockPos> normal = new ArrayList<>();

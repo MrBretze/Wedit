@@ -12,8 +12,6 @@ import fr.bretzel.wedit.util.Material;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.NumberInvalidException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -48,16 +46,7 @@ public class CommandSet extends IWeditCommand
         }
 
         String[] blocks = args[0].split(":");
-        Block blk = null;
-
-        try
-        {
-            blk = CommandBase.getBlockByText(sender, blocks[0]);
-        }
-        catch (NumberInvalidException e)
-        {
-            e.printStackTrace();
-        }
+        Block blk = Material.getNameOfBlock(blocks[0]);
 
         if (blk == null)
         {
@@ -82,7 +71,7 @@ public class CommandSet extends IWeditCommand
         ArrayList<BlockPos> priorityPos = new ArrayList<>();
         ArrayList<BlockPos> normalPos = new ArrayList<>();
         String block = args[0];
-        int data = 0;
+        
         BlockPos pos1 = Wedit.getFirstPosition();
         BlockPos pos2 = Wedit.getSecondPosition();
         int minx, maxx, miny, maxy, minz, maxz;
@@ -98,10 +87,9 @@ public class CommandSet extends IWeditCommand
         {
             String[] argument = block.split(":");
             block = argument[0];
-            data = Integer.valueOf(argument[1]);
         }
 
-        System.out.println("Block: " + block + " Data: " + data);
+        System.out.println("Block: " + block);
         
         for (int z = minz; z <= maxz; z++)
         {
@@ -112,7 +100,7 @@ public class CommandSet extends IWeditCommand
                     BlockPos p = new BlockPos(x, y, z);
                     IBlockState state = sender.getEntityWorld().getBlockState(p);
                     
-                    if (state.getBlock().getLocalizedName().equalsIgnoreCase(block) && state.getBlock().getMetaFromState(state) == data)
+                    if (Material.getNameOfBlock(state.getBlock()).equals(block))
                     {
                         continue;
                     }
@@ -165,7 +153,7 @@ public class CommandSet extends IWeditCommand
         
         for (BlockPos pos : priorityPos)
         {
-        	Wedit.setBlock(pos, block, data);
+        	Wedit.setBlock(pos, block);
         	
             if (speed > 0)
             {
@@ -179,7 +167,7 @@ public class CommandSet extends IWeditCommand
         
         for (BlockPos pos : normalPos)
         {
-        	Wedit.setBlock(pos, block, data);
+        	Wedit.setBlock(pos, block);
         	
             if (speed > 0)
             {

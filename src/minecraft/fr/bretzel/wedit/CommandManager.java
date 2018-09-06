@@ -66,14 +66,7 @@ public class CommandManager
 		
 		boolean cmdFeedBack = player.getEntityWorld().getGameRules().getBoolean("sendCommandFeedback");
 		
-		
-		for(ResourceLocation b : IRegistry.BLOCK.getKeys())
-		{
-			String block = b.getPath();
-			System.out.println(b.getPath().toUpperCase() + "(\"" + block + "\", new ResourceLocation(\"" + b.getNamespace() + "\", \"" + b.getPath() + "\")),");
-		}
-		
-		/*if(commands.containsKey(args[0])) {
+		if(commands.containsKey(args[0])) {
 			//for all command get the name of command and compare by the text entered by the player, if truc execute command.
 			for (String s : commands.keySet())
 			{
@@ -132,7 +125,7 @@ public class CommandManager
 		{
 			Wedit.sendMessage(ChatFormatting.AQUA + "      " + cmd);
 			Wedit.sendMessage(ChatFormatting.AQUA + "           " + commands.get(cmd).getUsage());
-		}*/
+		}
 		
 		return false;
 	}

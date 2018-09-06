@@ -43,16 +43,8 @@ public class CommandSphere extends IWeditCommand
 		}
 
 		String[] blocks = args[0].split(":");
-		Block blk = null;
+		Block blk = Material.getNameOfBlock(blocks[0]);
 
-		try
-		{
-			blk = CommandBase.getBlockByText(sender, blocks[0]);
-		}
-		catch (NumberInvalidException e)
-		{
-			e.printStackTrace();
-		}
 
 		if (blk == null)
 		{
@@ -91,13 +83,11 @@ public class CommandSphere extends IWeditCommand
 		Undo undo = new Undo(center, null, sender);
 
 		String block = args[0];
-		int data = 0;
 
 		if (block.indexOf(':') >= 0)
 		{
 			String[] argument = block.split(":");
 			block = argument[0];
-			data = Integer.valueOf(argument[1]);
 		}
 		
 		ArrayList<BlockPos> normal = new ArrayList<>();
@@ -135,7 +125,7 @@ public class CommandSphere extends IWeditCommand
 		
 		for(BlockPos pos : priority)
 		{
-			Wedit.setBlock(pos, block, data);
+			Wedit.setBlock(pos, block);
 			
             if (speed > 0)
             {
@@ -151,7 +141,7 @@ public class CommandSphere extends IWeditCommand
 
 		for(BlockPos pos : normal)
 		{
-			Wedit.setBlock(pos, block, data);
+			Wedit.setBlock(pos, block);
 			
             if (speed > 0)
             {
