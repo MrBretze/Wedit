@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "fr.bretzel.wedit.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "WeditMixin",
+    "client.PlayerInteraction",
+    "client.CommandDetector"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

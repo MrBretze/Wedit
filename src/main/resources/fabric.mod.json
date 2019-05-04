@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "wedit",
+  "version": "${version}",
+
+  "name": "Wedit 2.0",
+  "description": "A simple world edit work on all server and client",
+  "authors": [
+    "MrBretzel"
+  ],
+  "contact": {
+    "homepage": "https://github.com/MrBretze",
+    "sources": "not for now"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "fr.bretzel.wedit.Wedit"
+    ]
+  },
+  "mixins": [
+    "wedit.mixins.json"
+  ],
+
+  "requires": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
