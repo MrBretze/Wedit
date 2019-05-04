@@ -3,19 +3,23 @@ package fr.bretzel.wedit.command.wedit;
 import fr.bretzel.wedit.BlockInteract;
 import fr.bretzel.wedit.Wedit;
 import fr.bretzel.wedit.api.command.wedit.IWeditCommand;
+import fr.bretzel.wedit.block.BlockHelper;
+import fr.bretzel.wedit.block.WeditBlock;
 import fr.bretzel.wedit.selection.Selection;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TextFormat;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
 public class CommandSet extends IWeditCommand
 {
-    private boolean hollow = false;
+    private boolean hollow;
 
     public CommandSet(boolean hollow)
     {
@@ -25,7 +29,7 @@ public class CommandSet extends IWeditCommand
     @Override
     public boolean execute(PlayerEntity sender, String label, String[] args)
     {
-        Selection selection = Selection.getSelection(sender.getUuid());
+        Selection selection = Selection.getSelection(sender.getUuid()).clone();
 
         if (selection.getLocationOne() == null)
         {
@@ -39,13 +43,11 @@ public class CommandSet extends IWeditCommand
 
         if (args.length <= 0)
         {
-            Wedit.sendMessage(TextFormat.RED + "Syntax: #set <block> <skeep>");
+            Wedit.sendMessage(TextFormat.RED + getUsage());
             return false;
         }
 
-        String[] blocks = args[0].split(":");
-
-        Block blk = Registry.BLOCK.get(new Identifier(blocks[0]));
+        Block blk = Registry.BLOCK.get(new Identifier(args[0]));
 
         if (blk == null)
         {
@@ -67,74 +69,45 @@ public class CommandSet extends IWeditCommand
         if (speed == 0 && Wedit.isServer())
             speed = 1;
 
-        ArrayList<BlockPos> priorityPos = new ArrayList<>();
-        ArrayList<BlockPos> normalPos = new ArrayList<>();
-        String block = args[0];
+        //Undo.addUndo(undo);
 
-        BlockPos pos1 = selection.getLocationOne();
-        BlockPos pos2 = selection.getLocationTwo();
+        ArrayList<WeditBlock> normalPos = new ArrayList<>();
 
-        int minx, maxx, miny, maxy, minz, maxz;
-        minx = getMin(pos1.getX(), pos2.getX());
-        miny = getMin(pos1.getY(), pos2.getY());
-        minz = getMin(pos1.getZ(), pos2.getZ());
-        maxx = getMax(pos1.getX(), pos2.getX());
-        maxy = getMax(pos1.getY(), pos2.getY());
-        maxz = getMax(pos1.getZ(), pos2.getZ());
+        World world = sender.world;
 
-        //Undo undo = new Undo(pos1, pos2, sender);
-
-        if (block.indexOf(':') >= 0)
+        for (int z = selection.getMinZ(); z <= selection.getMaxZ(); z++)
         {
-            String[] argument = block.split(":");
-            block = argument[0];
-        }
-
-        System.out.println("Block: " + block);
-
-        for (int z = minz; z <= maxz; z++)
-        {
-            for (int x = minx; x <= maxx; x++)
+            for (int x = selection.getMinX(); x <= selection.getMaxX(); x++)
             {
-                for (int y = maxy; y >= miny; y--)
+                for (int y = selection.getMaxY(); y >= selection.getMinY(); y--)
                 {
-                    BlockPos p = new BlockPos(x, y, z);
-
                     if (hollow)
                     {
-                        if (x == maxx || x == minx || z == maxz || z == minz ||
-                                y == maxy || y == miny)
+                        if (x == selection.getMaxX() || x == selection.getMinX() || z == selection.getMaxZ() || z == selection.getMinZ()
+                                || y == selection.getMaxY() || y == selection.getMinY())
                         {
-                            /*if (Wedit.isPriorityPos(Material.getMaterialOfBlock(state.getBlock())))
-                                priorityPos.add(p);
-                            else
-                                normalPos.add(p);*/
-                            normalPos.add(p);
-                            //undo.addUndo(p);
-                        } else
-                            continue;
+                            BlockPos position = new BlockPos(x, y, z);
+                            BlockState blockState = world.getBlockState(position);
+                            normalPos.add(new WeditBlock(blockState.getBlock(), blockState, world, position));
+                        }
+
                     } else
                     {
-                        /*if (Wedit.isPriorityPos(Material.getMaterialOfBlock(state.getBlock())))
-                            priorityPos.add(p);
-                        else
-                            normalPos.add(p);
 
-                        undo.addUndo(p);*/
-                        normalPos.add(p);
+                        BlockPos position = new BlockPos(x, y, z);
+                        BlockState blockState = world.getBlockState(position);
+                        normalPos.add(new WeditBlock(blockState.getBlock(), blockState, world, position));
                     }
                 }
             }
         }
 
-        //Undo.addUndo(undo);
-
-        for (BlockPos pos : normalPos)
+        for (WeditBlock currentBlock : BlockHelper.sortByPriority(normalPos))
         {
-            if (sender.world.getBlockState(pos).getBlock() == blk)
+            if (currentBlock.getBlock() == blk)
                 continue;
 
-            Wedit.setBlock(blk, pos, BlockInteract.REPLACE);
+            Wedit.setBlock(blk, currentBlock.getPosition(), BlockInteract.REPLACE);
 
             if (speed > 0)
             {
@@ -142,22 +115,13 @@ public class CommandSet extends IWeditCommand
                 {
                     Thread.sleep(speed);
                 } catch (InterruptedException e)
-                {}
+                {
+                }
             }
         }
 
-        Wedit.sendMessage(TextFormat.AQUA + "Your are set " + TextFormat.BLUE + (priorityPos.size() + normalPos.size()) + TextFormat.AQUA + " block of " + TextFormat.BLUE + block.toUpperCase());
+        Wedit.sendMessage(TextFormat.AQUA + "Your are set " + TextFormat.BLUE + (normalPos.size()) + TextFormat.AQUA + " block of " + TextFormat.BLUE + args[0].toUpperCase());
         return true;
-    }
-
-    public int getMax(int pos, int pos1)
-    {
-        return pos > pos1 ? pos : pos1;
-    }
-
-    public int getMin(int pos, int pos1)
-    {
-        return pos < pos1 ? pos : pos1;
     }
 
     @Override

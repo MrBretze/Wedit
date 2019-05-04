@@ -11,9 +11,10 @@ public class Selection
     private BlockPos locationOne;
     private BlockPos locationTwo;
 
-    public Selection()
+    private Selection()
     {
     }
+
     public Selection(BlockPos locationOne, BlockPos locationTwo)
     {
         setLocationOne(locationOne);
@@ -62,7 +63,7 @@ public class Selection
         this.locationOne = locationOne;
     }
 
-    public boolean isADoubleLocation(BlockPos location)
+    public boolean isSelectioned(BlockPos location)
     {
         return isLocationTwo(location) || isLocationOne(location);
     }
@@ -85,5 +86,67 @@ public class Selection
         return getLocationOne().getX() == location.getX() &&
                 getLocationOne().getY() == location.getY() &&
                 getLocationOne().getZ() == location.getZ();
+    }
+
+    public boolean isLocationSet()
+    {
+        return getLocationOne() != null && getLocationTwo() != null;
+    }
+
+    public BlockPos getMaxPos()
+    {
+        return new BlockPos(getMaxX(), getMaxY(), getMaxZ());
+    }
+
+    public BlockPos getMinPos()
+    {
+        return new BlockPos(getMinX(), getMinY(), getMinZ());
+    }
+
+    public int getMinX()
+    {
+        return getMin(getLocationOne().getX(), getLocationTwo().getX());
+    }
+
+    public int getMaxX()
+    {
+        return getMax(getLocationOne().getX(), getLocationTwo().getX());
+    }
+
+    public int getMinY()
+    {
+        return getMin(getLocationOne().getY(), getLocationTwo().getY());
+    }
+
+    public int getMaxY()
+    {
+        return getMax(getLocationOne().getY(), getLocationTwo().getY());
+    }
+
+    public int getMinZ()
+    {
+        return getMin(getLocationOne().getZ(), getLocationTwo().getZ());
+    }
+
+    public int getMaxZ()
+    {
+
+        return getMax(getLocationOne().getZ(), getLocationTwo().getZ());
+    }
+
+    private int getMax(int pos, int pos1)
+    {
+        return pos > pos1 ? pos : pos1;
+    }
+
+    private int getMin(int pos, int pos1)
+    {
+        return pos < pos1 ? pos : pos1;
+    }
+
+    @Override
+    public Selection clone()
+    {
+        return new Selection(new BlockPos(getMaxX(), getMaxY(), getMaxZ()), new BlockPos(getMinX(), getMinY(), getMinZ()));
     }
 }

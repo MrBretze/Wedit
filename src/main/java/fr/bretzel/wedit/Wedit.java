@@ -1,5 +1,6 @@
 package fr.bretzel.wedit;
 
+import fr.bretzel.wedit.block.WeditBlock;
 import fr.bretzel.wedit.command.CommandManager;
 import fr.bretzel.wedit.command.wedit.CommandSet;
 import net.fabricmc.api.ModInitializer;
@@ -19,17 +20,27 @@ public class Wedit implements ModInitializer
 
     public static Item SELECTION_WAND = Items.GOLDEN_SWORD;
 
-    public static void setBlock(Block block, BlockPos blockPos)
-    {
-        setBlock(block, blockPos, BlockInteract.KEEP);
-    }
-
     public static void sendMessage(String msg)
     {
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
 
         if (minecraftClient.player != null)
             minecraftClient.player.addChatMessage(new StringTextComponent(msg), false);
+    }
+
+    public static void setBlock(Block block, BlockPos blockPos)
+    {
+        setBlock(block, blockPos, BlockInteract.KEEP);
+    }
+
+    public static void setBlock(WeditBlock weditBlock)
+    {
+        setBlock(weditBlock, BlockInteract.REPLACE);
+    }
+
+    public static void setBlock(WeditBlock weditBlock, BlockInteract blockInteract)
+    {
+        setBlock(weditBlock.getBlock(), weditBlock.getPosition(), blockInteract);
     }
 
     public static void setBlock(Block block, BlockPos blockPos, BlockInteract blockInteract)
@@ -48,16 +59,23 @@ public class Wedit implements ModInitializer
         }
     }
 
+    public static boolean isServer()
+    {
+        MinecraftClient minecraftClient = MinecraftClient.getInstance();
+        return !minecraftClient.isInSingleplayer();
+    }
+
     @Override
     public void onInitialize()
     {
         System.out.println("Start of Wedit 2.0 Init ! (with Fabric API)");
 
+        //Undo undo = new Undo();
+
         CommandManager.registerCommand(new CommandSet(false), "set");
         CommandManager.registerCommand(new CommandSet(true), "hset");
 
         /*
-
         //Register all command
         registerCommand(new CommandSet(false), "set");
         registerCommand(new CommandSet(true), "hset");
@@ -69,11 +87,5 @@ public class Wedit implements ModInitializer
         registerCommand(new CommandCircle(false), "circle");
         registerCommand(new CommandCircle(true), "hcircle");
          */
-    }
-
-    public static boolean isServer()
-    {
-        MinecraftClient minecraftClient = MinecraftClient.getInstance();
-        return !minecraftClient.isInSingleplayer();
     }
 }
